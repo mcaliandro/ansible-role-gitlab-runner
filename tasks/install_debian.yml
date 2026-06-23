@@ -1,0 +1,41 @@
+---
+
+- name: Add Gitlab Runner apt repository
+  ansible.builtin.deb822_repository:
+    name: gitlab-runner
+    types: deb
+    uris: "{{ gitlab_runner_repo_baseurl }}/{{ ansible_facts.distribution | lower }}/"
+    suites: "{{ ansible_facts.distribution_release | lower }}"
+    components: main
+    signed_by: "{{ gitlab_runner_repo_gpgkey }}"
+    state: present
+
+- name: Install Gitlab Runner, latest version
+  ansible.builtin.apt:
+    name: gitlab-runner
+    state: latest
+    allow_downgrade: true
+    update_cache: true
+  when: gitlab_runner_package_latest
+
+- name: Install Gitlab Runner, specific version
+  block:
+    - name: Remove apt package pin, if exists
+      ansible.builtin.file:
+        path: /etc/apt/preferences.d/gitlab-runner
+        state: absent
+
+    - name: Install Gitlab Runner
+      ansible.builtin.apt:
+        name:
+          - "gitlab-runner={{ gitlab_runner_package_version }}-1"
+          - "gitlab-runner-helper-images={{ gitlab_runner_package_version }}-1"
+        state: present
+        allow_downgrade: true
+        update_cache: true
+
+    - name: Apply apt package pin
+      ansible.builtin.template:
+        src: apt-preferences.j2
+        dest: /etc/apt/preferences.d/gitlab-runner
+  when: not gitlab_runner_package_latest

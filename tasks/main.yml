@@ -1,0 +1,44 @@
+---
+
+- name: Install GitLab Runner in Debian-based systems
+  ansible.builtin.include_tasks:
+    file: install_debian.yml
+    apply:
+      tags: install
+  when: ansible_facts.os_family == "Debian"
+  tags: install
+
+- name: Configure global section
+  ansible.builtin.lineinfile:
+    path: "{{ gitlab_runner_dir }}/config.toml"
+    regexp: "^{{ item.key }} = (.*)$"
+    line: "{{ item.key }} = {{ item.value }}"
+    state: present
+  with_dict: "{{ gitlab_runner_config_global }}"
+  when: gitlab_runner_config_global | length > 0
+  notify: Restart systemd service
+  tags: config
+
+- name: Create template directory
+  ansible.builtin.file:
+    path: "{{ gitlab_runner_config_templates_dir }}"
+    state: directory
+  when: gitlab_runner_config_templates | length > 0
+  tags: config
+
+- name: Copy configuration templates
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ gitlab_runner_config_templates_dir }}/{{ item | basename }}"
+  loop: "{{ gitlab_runner_config_templates }}"
+  when: gitlab_runner_config_templates | length > 0
+  tags: config
+
+- name: Include registration tasks
+  ansible.builtin.include_tasks:
+    file: register.yml
+    apply:
+      tags: register
+  loop: "{{ gitlab_runner_register_runners }}"
+  when: gitlab_runner_register_runners | length > 0
+  tags: register

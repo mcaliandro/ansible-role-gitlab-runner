@@ -1,0 +1,5 @@
+[[runners]]
+  [runners.docker]
+    tls_verify = false
+    pull_policies = ["always"]
+    privileged = false

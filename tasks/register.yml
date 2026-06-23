@@ -1,0 +1,37 @@
+---
+
+- name: Check if runner is already registered
+  ansible.builtin.lineinfile:
+    path: "{{ gitlab_runner_config_dir }}/config.toml"
+    regexp: '^(.*)name = "{{ item.name }}"$'
+    state: absent
+  check_mode: true
+  register: runner_check
+
+- name: Check input variables
+  ansible.builtin.assert:
+    that:
+      - (item.url is defined) and (item.url | length > 0)
+      - (item.token is defined) and (item.token | length > 0)
+      - (item.name is defined) and (item.url | length > 0)
+      - (item.executor is defined) and (item.executor | length > 0)
+  when: not runner_check.found
+
+- name: Register executor
+  ansible.builtin.shell: >
+    gitlab-runner register --non-interactive
+      --url "{{ item.url }}"
+      --token "{{ item.token }}"
+      --name "{{ item.name }}"
+      --executor "{{ item.executor }}"
+      {% if item.template is defined -%}
+      --template-config "{{ gitlab_runner_config_templates_dir }}/{{ item.template }}"
+      {%- endif %}
+      {% if item.extra_args is defined -%}
+      {% for arg in item.extra_args -%}
+      {{ arg }}
+      {%- endfor %}
+      {%- endif %}
+  register: register_cmd
+  changed_when: "'Runner registered successfully' in register_cmd.stdout_lines"
+  when: not runner_check.found

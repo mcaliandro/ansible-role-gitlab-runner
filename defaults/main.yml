@@ -1,0 +1,58 @@
+---
+
+# Setup this variable to true in order to install the latest release.
+gitlab_runner_package_latest: true
+
+# Specify the version of GitLab Runner to install.
+# Requires `gitlab_runner_package_latest=false`.
+gitlab_runner_package_version: 19.1.0
+
+# Configure global section using yaml dictionary.
+# ref: https://docs.gitlab.com/runner/configuration/advanced-configuration/#the-global-section
+#
+# Define key-value pairs that will be converted into toml syntax.
+# Example:
+#   gitlab_runner_config_global:
+#     concurrent: 10
+#     log_level: info
+#     log_format: json
+#     ...
+#
+gitlab_runner_config_global: {}
+
+# Upload user-defined configuration templates that can be reused when
+# registering runners. A template should be used to specify settings that are
+# not supported by register command.
+# ref: https://docs.gitlab.com/runner/register/#register-with-a-configuration-template
+#
+# User-defined template files can be located into `files` directory of this
+# role, or in a sub-directory of `inventory_dir`. See example below.
+#
+# Then, templates files are copied into the path specified by the variable
+# `gitlab_runner_config_templates_dir` (see `vars/main.yml`).
+#
+# Example:
+#   gitlab_runner_config_templates:
+#     - docker-unprivileged.toml
+#     - "{{ inventory_dir }}/group_vars/gitlab_runners/docker-privileged.toml"
+#
+gitlab_runner_config_templates: []
+
+# Register runners using non-interactive mode, by specifying the bare minimum
+# configuration.
+#
+# Mandatory fields: `name`, `url`, `token`, `executor`.
+# Optional fields:
+#   - `template`: name of the configuration template file.
+#   - `extra_args`: a list of additional arguments to pass to register command.
+#
+# Example:
+#   gitlab_runner_register_runners
+#     - name: docker
+#       url: https://gitlab.example.org
+#       token: GITLAB_AUTH_TOKEN
+#       executor: docker
+#       template: docker-privileged.toml
+#       extra_args: []
+#
+gitlab_runner_register_runners: []

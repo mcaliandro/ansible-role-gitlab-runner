@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  author: mcaliandro
+  description: Install and configure GitLab Runner
+  role_name: gitlab_runner
+
+  license: Apache-2.0
+
+  min_ansible_version: "2.10"
+
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm
+        - trixie
+    - name: Ubuntu
+      versions:
+        - jammy
+        - noble
+        - resolute
+
+  galaxy_tags:
+    - gitlab
+    - runner
+    - devops
+    - ci/cd
+    - pipelines
+
+dependencies: []
