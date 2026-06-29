@@ -13,7 +13,7 @@ None.
 Role Variables
 --------------
 
-A description of the settable variables for this role (see `defaults/main.yml`).
+A description of the settable variables for this role (see `defaults/main.yml` and `vars/main.yml`).
 
 ### Install latest version
 By default, this role installs the latest GitLab Runner release avaiable in official repository.
@@ -48,9 +48,10 @@ Consult the official documentation for more info about [global section](https://
 
 ### User-defined configuration templates
 Upload user-defined configuration templates that can be reused when registering runners.
-The destination directory is specified by the variable `gitlab_runner_config_templates_dir` (default is `/etc/gitlab-runner/templates`).
-Pre-defined template files are located into `files` directory of this role. Custom templates can be located into `files` or in a sub-directory of `inventory_dir`. See example below.
-
+The destination directory is specified by the variable `gitlab_runner_config_templates_dir`, default path is `/etc/gitlab-runner/templates` (see `vars/main.yml`).
+Pre-defined template files are located into `files` directory of this role.
+Custom templates can be located into `files` or in a sub-directory of `inventory_dir`.
+See example the below.
 ```yaml
 gitlab_runner_config_templates:
   - docker-unprivileged.toml
@@ -85,6 +86,8 @@ gitlab_runner_register_runners:
     token: GITLAB_AUTH_TOKEN
     executor: docker
 ```
+
+Consult the official documentation for more info about [register a runner](https://docs.gitlab.com/runner/register).
 
 
 Dependencies

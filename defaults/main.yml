@@ -34,7 +34,7 @@ gitlab_runner_config_global: {}
 # Example:
 #   gitlab_runner_config_templates:
 #     - docker-unprivileged.toml
-#     - "{{ inventory_dir }}/group_vars/gitlab_runners/docker-privileged.toml"
+#     - "{{ inventory_dir }}/host_vars/{{ inventory_hostname }}/docker-privileged.toml"
 #
 gitlab_runner_config_templates: []
 
