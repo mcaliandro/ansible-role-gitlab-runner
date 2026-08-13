@@ -1,5 +1,13 @@
 ---
 
+- name: Check input variables
+  ansible.builtin.assert:
+    that:
+      - (item.url is defined) and (item.url | length > 0)
+      - (item.token is defined) and (item.token | length > 0)
+      - (item.name is defined) and (item.url | length > 0)
+      - (item.executor is defined) and (item.executor | length > 0)
+
 - name: Check if runner is already registered (check_mode=true)
   ansible.builtin.lineinfile:
     path: "{{ gitlab_runner_config_dir }}/config.toml"
@@ -9,16 +17,7 @@
   changed_when: false
   register: runner_check
 
-- name: Check input variables
-  ansible.builtin.assert:
-    that:
-      - (item.url is defined) and (item.url | length > 0)
-      - (item.token is defined) and (item.token | length > 0)
-      - (item.name is defined) and (item.url | length > 0)
-      - (item.executor is defined) and (item.executor | length > 0)
-  when: not runner_check.found
-
-- name: Register executor
+- name: Register runner
   ansible.builtin.shell: >-
     gitlab-runner register
     --non-interactive
