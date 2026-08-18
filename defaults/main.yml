@@ -5,7 +5,7 @@ gitlab_runner_package_latest: true
 
 # Specify the version of GitLab Runner to install.
 # Requires `gitlab_runner_package_latest=false`.
-gitlab_runner_package_version: 19.1.0
+gitlab_runner_package_version: ""
 
 # Configure global section using yaml dictionary.
 # ref: https://docs.gitlab.com/runner/configuration/advanced-configuration/#the-global-section

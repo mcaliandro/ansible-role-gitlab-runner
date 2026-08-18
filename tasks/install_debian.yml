@@ -20,6 +20,11 @@
 
 - name: Install Gitlab Runner, specific version
   block:
+    - name: Check input variable 'gitlab_runner_package_version'
+      ansible.builtin.assert:
+        that:
+          - (gitlab_runner_package_version is defined) and (gitlab_runner_package_version | length > 0)
+
     - name: Remove apt package pin, if exists
       ansible.builtin.file:
         path: /etc/apt/preferences.d/gitlab-runner

@@ -1,7 +1,10 @@
 Ansible role for GitLab Runner
 =========
 
-Install and configure GitLab Runner, as well as register new runners.
+Install and configure GitLab Runner, as well as register new runners. The role accepts the following tags in order to run specific tasks: 
+- `install`: to install only the GitLab Runner package;
+- `config`: to update the configuration file (`config.toml`) and to upload new configuration template files;
+- `register`: to register a new runner.
 
 
 Requirements
@@ -22,7 +25,7 @@ gitlab_runner_package_latest: true
 ```
 
 ### Install specific version
-To install a specific version (default `19.1.0`), setup the variables as follows:
+To install a specific version (e.g., `19.1.0`), setup the variables as follows:
 ```yaml
 gitlab_runner_package_latest: false
 gitlab_runner_package_version: 19.1.0
@@ -81,10 +84,21 @@ Optional fields:
 An example:
 ```yaml
 gitlab_runner_register_runners:
+  # select Docker executor
   - name: docker
     url: https://gitlab.example.org
     token: GITLAB_AUTH_TOKEN
     executor: docker
+    template: docker-unprivileged.toml
+    extra_args:
+      - --docker-image alpine:latest
+  # select shell executor
+  - name: shell:
+    url: https://gitlab.example.org
+    token: GITLAB_AUTH_TOKEN
+    executor: shell
+    extra_args:
+      - --shell bash
 ```
 
 Consult the official documentation for more info about [register a runner](https://docs.gitlab.com/runner/register).
@@ -103,9 +117,9 @@ Install and configure GitLab Runner using this playbook.
 
 ```yaml
 # Usage:
-#   ansible-playbook -l <host/group> gitlab_runner.yml
+#   ansible-playbook -l <host/group> gitlab_runner.yml [--tags [install,config,register]]
 ---
-- name: Install and configure a GitLab Runner host
+- name: Install and configure GitLab Runner
   hosts: all
   become: true
 
