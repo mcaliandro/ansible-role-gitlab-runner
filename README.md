@@ -77,9 +77,9 @@ gitlab_runner_register_runners: []
 
 Mandatory fields `name`, `url`, `token`, `executor` specify the bare minimum configuration for registering a runner.
 
-Optional fields:
+Optional fields should be used to specify an advanced configuration of an executor:
   - `template`: name of the configuration template file.
-  - `extra_args`: a list of additional arguments to pass to register command.
+  - `extra_args`: a list of additional arguments and parameters to pass to register command.
 
 An example:
 ```yaml
@@ -89,7 +89,7 @@ gitlab_runner_register_runners:
     url: https://gitlab.example.org
     token: GITLAB_AUTH_TOKEN
     executor: docker
-    template: docker-unprivileged.toml
+    template: docker-privileged.toml
     extra_args:
       - --docker-image alpine:latest
   # select shell executor
@@ -101,7 +101,7 @@ gitlab_runner_register_runners:
       - --shell bash
 ```
 
-Consult the official documentation for more info about [register a runner](https://docs.gitlab.com/runner/register).
+Consult the official documentation for more info about [register a runner](https://docs.gitlab.com/runner/register) and [executors](https://docs.gitlab.com/runner/executors/).
 
 
 Dependencies

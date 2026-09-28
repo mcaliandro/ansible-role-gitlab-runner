@@ -21,8 +21,9 @@ gitlab_runner_package_version: ""
 gitlab_runner_config_global: {}
 
 # Upload user-defined configuration templates that can be reused when
-# registering runners. A template should be used to specify settings that are
-# not supported by register command.
+# registering runners and configure their executors. A template is convenient
+# when specifying advanced configurations in spite of listing them as arguments
+# and parameters to `gitlab-runner register` command.
 # ref: https://docs.gitlab.com/runner/register/#register-with-a-configuration-template
 #
 # User-defined template files can be located into `files` directory of this
@@ -38,12 +39,25 @@ gitlab_runner_config_global: {}
 #
 gitlab_runner_config_templates: []
 
-# Register runners using non-interactive mode, by specifying the bare minimum
-# configuration.
+# Register runners and configure their executors using non-interactive mode.
+# ref:
+#   - https://docs.gitlab.com/runner/register 
+#   - https://docs.gitlab.com/runner/executors/
 #
-# Mandatory fields: `name`, `url`, `token`, `executor`.
+# This method relies on a set of mandatory fields to provide a bare minimum
+# configuration of a runner. Advanced configuration of an executor requires
+# the usage of the optional field called `extra_args` in order to pass the list
+# of arguments and parameters supported by `gitlab-runner register` command.
+#
+# Mandatory fields:
+#   - `name`: name of the runner.
+#   - `url`: URL of the GitLab server.
+#   - `token`: registration token issued by the server for this runner.
+#   - `executor`: type of executor supported by the runner.
+#
 # Optional fields:
-#   - `template`: name of the configuration template file.
+#   - `template`: name of the configuration template file present on the host
+#                 (see `gitlab_runner_config_templates` variable).
 #   - `extra_args`: a list of additional arguments to pass to register command.
 #
 # Example:
@@ -53,6 +67,7 @@ gitlab_runner_config_templates: []
 #       token: GITLAB_AUTH_TOKEN
 #       executor: docker
 #       template: docker-privileged.toml
-#       extra_args: []
+#       extra_args:
+#         - --docker-image alpine:latest
 #
 gitlab_runner_register_runners: []

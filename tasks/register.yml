@@ -10,7 +10,7 @@
 
 - name: Check if runner is already registered (check_mode=true)
   ansible.builtin.lineinfile:
-    path: "{{ gitlab_runner_config_dir }}/config.toml"
+    path: "{{ gitlab_runner_config_file }}"
     regexp: '^(.*)name = "{{ item.name }}"$'
     state: absent
   check_mode: true
