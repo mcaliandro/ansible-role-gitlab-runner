@@ -11,6 +11,7 @@ gitlab_runner_package_version: ""
 # ref: https://docs.gitlab.com/runner/configuration/advanced-configuration/#the-global-section
 #
 # Define key-value pairs that will be converted into toml syntax.
+#
 # Example:
 #   gitlab_runner_config_global:
 #     concurrent: 10
@@ -26,12 +27,6 @@ gitlab_runner_config_global: {}
 # and parameters to `gitlab-runner register` command.
 # ref: https://docs.gitlab.com/runner/register/#register-with-a-configuration-template
 #
-# User-defined template files can be located into `files` directory of this
-# role, or in a sub-directory of `inventory_dir`. See example below.
-#
-# Then, templates files are copied into the path specified by the variable
-# `gitlab_runner_config_templates_dir` (see `vars/main.yml`).
-#
 # Example:
 #   gitlab_runner_config_templates:
 #     - docker-unprivileged.toml
@@ -43,11 +38,6 @@ gitlab_runner_config_templates: []
 # ref:
 #   - https://docs.gitlab.com/runner/register 
 #   - https://docs.gitlab.com/runner/executors/
-#
-# This method relies on a set of mandatory fields to provide a bare minimum
-# configuration of a runner. Advanced configuration of an executor requires
-# the usage of the optional field called `extra_args` in order to pass the list
-# of arguments and parameters supported by `gitlab-runner register` command.
 #
 # Mandatory fields:
 #   - `name`: name of the runner.

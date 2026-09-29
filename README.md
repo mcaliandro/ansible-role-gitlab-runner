@@ -55,6 +55,7 @@ The destination directory is specified by the variable `gitlab_runner_config_tem
 Pre-defined template files are located into `files` directory of this role.
 Custom templates can be located into `files` or in a sub-directory of `inventory_dir`.
 See example the below.
+
 ```yaml
 gitlab_runner_config_templates:
   - docker-unprivileged.toml
@@ -75,16 +76,17 @@ Specify the list of runners to be registered using non-interactive mode.
 gitlab_runner_register_runners: []
 ```
 
-Mandatory fields `name`, `url`, `token`, `executor` specify the bare minimum configuration for registering a runner.
+This method relies on a set of mandatory fields to provide a bare minimum configuration.
+They are `name`, `url`, `token`, and `executor`.
 
-Optional fields should be used to specify an advanced configuration of an executor:
-  - `template`: name of the configuration template file.
-  - `extra_args`: a list of additional arguments and parameters to pass to register command.
+There are two ways to apply advanced configuration of an executor: 
+1. use the optional field `extra_args` to pass a list of arguments and parameters supported by `gitlab-runner register` command;
+2. use the optional field `template` to specify the name configuration template file (see `gitlab_runner_config_templates` variable).
 
 An example:
 ```yaml
 gitlab_runner_register_runners:
-  # select Docker executor
+  # configure a Docker executor
   - name: docker
     url: https://gitlab.example.org
     token: GITLAB_AUTH_TOKEN
@@ -92,7 +94,7 @@ gitlab_runner_register_runners:
     template: docker-privileged.toml
     extra_args:
       - --docker-image alpine:latest
-  # select shell executor
+  # configure a shell executor
   - name: shell:
     url: https://gitlab.example.org
     token: GITLAB_AUTH_TOKEN

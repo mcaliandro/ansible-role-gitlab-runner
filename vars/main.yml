@@ -6,3 +6,5 @@ gitlab_runner_config_templates_dir: "{{ gitlab_runner_config_dir }}/templates"
 
 gitlab_runner_repo_baseurl: https://packages.gitlab.com/runner/gitlab-runner
 gitlab_runner_repo_gpgkey: https://packages.gitlab.com/gpgkey/gpg.key
+
+gitlab_runner_package_suffix: "-1"

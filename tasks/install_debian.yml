@@ -23,18 +23,19 @@
     - name: Check input variable 'gitlab_runner_package_version'
       ansible.builtin.assert:
         that:
-          - (gitlab_runner_package_version is defined) and (gitlab_runner_package_version | length > 0)
+          - gitlab_runner_package_version is defined
+          - gitlab_runner_package_version | length > 0
 
     - name: Remove apt package pin, if exists
       ansible.builtin.file:
         path: /etc/apt/preferences.d/gitlab-runner
         state: absent
 
-    - name: Install Gitlab Runner
+    - name: "Install Gitlab Runner version {{ gitlab_runner_package_version }}"
       ansible.builtin.apt:
         name:
-          - "gitlab-runner={{ gitlab_runner_package_version }}-1"
-          - "gitlab-runner-helper-images={{ gitlab_runner_package_version }}-1"
+          - "gitlab-runner={{ gitlab_runner_package_version }}{{ gitlab_runner_package_suffix }}"
+          - "gitlab-runner-helper-images={{ gitlab_runner_package_version }}{{ gitlab_runner_package_suffix }}"
         state: present
         allow_downgrade: true
         update_cache: true
