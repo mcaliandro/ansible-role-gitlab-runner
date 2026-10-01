@@ -1,10 +1,7 @@
 Ansible role for GitLab Runner
 =========
 
-Install and configure GitLab Runner, as well as register new runners. The role accepts the following tags in order to run specific tasks: 
-- `install`: to install only the GitLab Runner package;
-- `config`: to update the configuration file (`config.toml`) and to upload new configuration template files;
-- `register`: to register a new runner.
+Install and configure GitLab Runner, as well as register new runners.
 
 
 Requirements
@@ -19,20 +16,22 @@ Role Variables
 A description of the settable variables for this role (see `defaults/main.yml` and `vars/main.yml`).
 
 ### Install latest version
-By default, this role installs the latest GitLab Runner release avaiable in official repository.
+By default, this role installs the latest GitLab Runner release available in the official GitLab repository.
 ```yaml
 gitlab_runner_package_latest: true
 ```
 
 ### Install specific version
-To install a specific version (e.g., `19.1.0`), setup the variables as follows:
+To install a specific GitLab Runner release (e.g., `19.1.0`), setup the variables as follows:
 ```yaml
 gitlab_runner_package_latest: false
 gitlab_runner_package_version: 19.1.0
 ```
 
-### Setup global section
-Configure global section using `yaml` dictionary, its key-value pairs will be converted into `toml` syntax.
+Note that `gitlab_runner_package_latest=true` takes precedence over `gitlab_runner_package_version`.
+
+### Configure global settings
+Configure global section of GitLab Runner installation using `gitlab_runner_config_global` dictionary, its key-value pairs will be converted into `toml` syntax.
 
 An example:
 ```yaml
@@ -42,7 +41,7 @@ gitlab_runner_config_global:
   log_format: json
 ```
 
-By default, the dictionary is empty, so the global settings are not overridden.
+By default, the dictionary is empty, so the default global settings are not overridden.
 ```yaml
 gitlab_runner_config_global: {}
 ```
@@ -116,10 +115,14 @@ Example Playbook
 ----------------
 
 Install and configure GitLab Runner using this playbook.
+The role accepts the following tags in order to run specific tasks: 
+- `install`: to install only the GitLab Runner package;
+- `config`: to update the configuration file (`config.toml`) and to upload new configuration template files;
+- `register`: to register a new runner.
 
 ```yaml
 # Usage:
-#   ansible-playbook -l <host/group> gitlab_runner.yml [--tags [install,config,register]]
+#   ansible-playbook -l <host/group> gitlab_runner.yml [--tags TAGS]
 ---
 - name: Install and configure GitLab Runner
   hosts: all

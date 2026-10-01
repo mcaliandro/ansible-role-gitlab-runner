@@ -1,6 +1,7 @@
 ---
 
 # Setup this variable to true in order to install the latest release.
+# This variable takes precedence over `gitlab_runner_package_version`.
 gitlab_runner_package_latest: true
 
 # Specify the version of GitLab Runner to install.
