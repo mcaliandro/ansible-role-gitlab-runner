@@ -1,11 +1,10 @@
 ---
 
-- name: Install GitLab Runner in Debian-based systems
+- name: Include installation tasks per OS family
   ansible.builtin.include_tasks:
-    file: install_debian.yml
+    file: "install/{{ ansible_facts.os_family }}.yml"
     apply:
       tags: install
-  when: ansible_facts.os_family == "Debian"
   tags: install
 
 - name: Configure global section

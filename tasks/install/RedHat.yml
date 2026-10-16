@@ -1,0 +1,41 @@
+---
+
+- name: Add GitLab Runner yum repository
+  ansible.builtin.yum_repository:
+    name: runner_gitlab-runner
+    baseurl: "{{ gitlab_runner_repo_baseurl }}/el/$releasever/$basearch"
+    enabled: true
+    gpgkey: "{{ gitlab_runner_repo_gpgkey }}"
+    gpgcheck: true
+    sslverify: true
+    sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+    metadata_expire: "300"
+    state: present
+
+- name: Remove lock from rpm package
+  community.general.dnf_versionlock:
+    name: gitlab-runner
+    state: absent
+
+- name: Install the latest release available
+  ansible.builtin.dnf:
+    name: gitlab-runner
+    state: latest
+    update_cache: true
+  when: (gitlab_runner_version is not defined) or (gitlab_runner_version | length == 0)
+
+- name: Install the required version
+  block:
+    - name: "Install version {{ gitlab_runner_version }}"
+      ansible.builtin.dnf:
+        name: "gitlab-runner-{{ gitlab_runner_version }}{{ gitlab_runner_package_suffix }}"
+        state: present
+        update_cache: true
+
+    - name: Apply lock to rpm package
+      community.general.dnf_versionlock:
+        name: gitlab-runner
+        state: present
+  when:
+    - gitlab_runner_version is defined
+    - gitlab_runner_version | length > 0

@@ -7,7 +7,7 @@ Install and configure GitLab Runner, as well as register new runners.
 Requirements
 ------------
 
-None.
+- [dnf_versionlock](https://docs.ansible.com/projects/ansible/latest/collections/community/general/dnf_versionlock_module.html) module from `community.general` collection (version 13.4.0).
 
 
 Role Variables
@@ -15,20 +15,18 @@ Role Variables
 
 A description of the settable variables for this role (see `defaults/main.yml` and `vars/main.yml`).
 
-### Install latest version
-By default, this role installs the latest GitLab Runner release available in the official GitLab repository.
+### Choose the version
+Use `gitlab_version` variable to install a specific version of GitLab.
+
+An example:
 ```yaml
-gitlab_runner_package_latest: true
+gitlab_runner_version: 19.1.0
 ```
 
-### Install specific version
-To install a specific GitLab Runner release (e.g., `19.1.0`), setup the variables as follows:
+By default, the variable is set to empty, so the role installs the latest GitLab Runner release available in the official GitLab repository.
 ```yaml
-gitlab_runner_package_latest: false
-gitlab_runner_package_version: 19.1.0
+gitlab_runner_version: ""
 ```
-
-Note that `gitlab_runner_package_latest=true` takes precedence over `gitlab_runner_package_version`.
 
 ### Configure global settings
 Configure global section of GitLab Runner installation using `gitlab_runner_config_global` dictionary, its key-value pairs will be converted into `toml` syntax.
