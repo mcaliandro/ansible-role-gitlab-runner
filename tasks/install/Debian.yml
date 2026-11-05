@@ -36,7 +36,7 @@
 
     - name: Apply pin to deb package
       ansible.builtin.template:
-        src: apt-preferences.j2
+        src: apt-preferences/gitlab-runner.j2
         dest: /etc/apt/preferences.d/gitlab-runner
   when:
     - gitlab_runner_version is defined
